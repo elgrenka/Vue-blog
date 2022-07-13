@@ -37,7 +37,9 @@
       "parser": "@babel/eslint-parser"
     },
     "rules": {
-      "semi": "warn"
+      "semi": "warn",
+      "no-unused-vars": "warn",
+      "no-useless-computed-key": "warn"
     }
   },
   "browserslist": [

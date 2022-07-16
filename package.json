@@ -39,7 +39,8 @@
     "rules": {
       "semi": "warn",
       "no-unused-vars": "warn",
-      "no-useless-computed-key": "warn"
+      "no-useless-computed-key": "warn",
+      "vue/no-unused-components": "warn"
     }
   },
   "browserslist": [

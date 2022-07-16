@@ -1,28 +1,31 @@
 <template>
-  <div class="post" v-for="post of posts" :key=post.id>
-    <div><b>Name: </b>{{ post.title }}</div>
-    <div><b>Description: </b>{{ post.body }}</div>
+  <div>
+    <h3>List of users</h3>
+    <post-item
+      v-for="post of posts"
+      :post="post"
+      :key="post.id"
+    />
   </div>
 </template>
 
 <script>
-  export default {
-    props: {
-      posts: {
-        type: Array,
-        required: true
-      }
-    }
-  };
+import PostItem from '@/components/PostItem';
+export default {
+  components: {PostItem},
+  props: {
+    posts: {
+      type: Array,
+      required: true,
+    },
+  },
+};
 </script>
 
 <style scoped>
-.post {
-  padding: 15px;
-  border: 2px solid teal;
-  margin-top: 15px;
-}
+
 </style>
+
 
 
 

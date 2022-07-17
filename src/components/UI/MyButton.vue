@@ -13,6 +13,7 @@ export default {
 <style scoped>
 .btn {
   align-self: flex-end;
+  margin-left: 10px;
   padding: 10px 15px;
   background: none;
   color: red;

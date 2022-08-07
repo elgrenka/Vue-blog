@@ -41,7 +41,8 @@
       "semi": "warn",
       "no-unused-vars": "warn",
       "no-useless-computed-key": "warn",
-      "vue/no-unused-components": "warn"
+      "vue/no-unused-components": "warn",
+      "vue/multi-word-component-names": "warn"
     }
   },
   "browserslist": [

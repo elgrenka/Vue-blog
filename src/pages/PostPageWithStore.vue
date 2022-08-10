@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>The page of posts</h1>
+    <h1>{{ $store.state.post.limit }}</h1>
+    <!-- <h1>The page of posts</h1>
     <my-input v-model="searchQuery" placeholder="Searching ..." v-focus />
     <div class="app__btns">
       <my-button @click="showDialog"> Create post </my-button>
@@ -16,7 +17,7 @@
       v-if="!isPostLoading"
     />
     <div v-else>Loading ...</div>
-    <div v-intersection="loadMorePosts" class="observer"></div>
+    <div v-intersection="loadMorePosts" class="observer"></div> -->
     <!-- <div class="page__wrapper">
       <div v-for="pageNumber in totalPages" :key="pageNumber" class="page"
         :class="{'current-page': page === pageNumber}"
@@ -74,49 +75,10 @@ export default {
     // changePage(pageNumber) {
     //   this.page = pageNumber;
     // },
-    async fetchPosts() {
-      try {
-        this.isPostLoading = true;
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts",
-          {
-            params: {
-              _page: this.page,
-              _limit: this.limit,
-            },
-          }
-        );
-        this.totalPages =
-          Math.ceil(response.headers["x-total-count"] / this.limit);
-        this.posts = response.data;
-      } catch (error) {
-        alert("Somthing wrong");
-      } finally {
-        this.isPostLoading = false;
-      }
-    },
-    async loadMorePosts() {
-      try {
-        this.page += 1;
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts",
-          {
-            params: {
-              _page: this.page,
-              _limit: this.limit,
-            },
-          }
-        );
-        this.totalPages =
-          Math.ceil(response.headers["x-total-count"] / this.limit);
-        this.posts = [...this.posts, ...response.data];
-      } catch (error) {
-        alert("Somthing wrong");
-      } 
-    },
+    
   },
   mounted() {
-    this.fetchPosts();
+    // this.fetchPosts();
     // const options = {
     //   rootMargin: '0px',
     //   threshold: 1.0
@@ -130,18 +92,7 @@ export default {
     // observer.observe(this.$refs.observer);
   },
   computed: {
-    sortedPosts() {
-      return [...this.posts].sort((post1, post2) => {
-        return post1[this.selectedSort]?.localeCompare(
-          post2[this.selectedSort]
-        );
-      });
-    },
-    sortedAndSearchedPosts() {
-      return this.sortedPosts.filter((post) =>
-        post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    },
+    
   },
   watch: {
     // page() {
@@ -152,7 +103,6 @@ export default {
 </script>
 
 <style scoped>
-
 .app__btns {
   margin: 15px 0;
   display: flex;

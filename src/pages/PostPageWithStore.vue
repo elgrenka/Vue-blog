@@ -1,11 +1,10 @@
 <template>
   <div>
-    <h1>{{ $store.state.post.limit }}</h1>
-    <!-- <h1>The page of posts</h1>
-    <my-input v-model="searchQuery" placeholder="Searching ..." v-focus />
+    <h1>The page of posts</h1>
+    <my-input :model-value="searchQuery" @update:model-value="setSearchQuery" placeholder="Searching ..." v-focus />
     <div class="app__btns">
       <my-button @click="showDialog"> Create post </my-button>
-      <my-select v-model="selectedSort" :options="sortOptions" />
+      <my-select :model-value="selectedSort" @update:model-value="setSelectedSort" :options="sortOptions" />
     </div>
     <my-dialog v-model:show="dialogVisible">
       <post-form @create="createPost" />
@@ -17,15 +16,18 @@
       v-if="!isPostLoading"
     />
     <div v-else>Loading ...</div>
-    <div v-intersection="loadMorePosts" class="observer"></div> -->
-    <!-- <div class="page__wrapper">
-      <div v-for="pageNumber in totalPages" :key="pageNumber" class="page"
-        :class="{'current-page': page === pageNumber}"
+    <div v-intersection="loadMorePosts" class="observer"></div>
+    <div class="page__wrapper">
+      <div
+        v-for="pageNumber in totalPages"
+        :key="pageNumber"
+        class="page"
+        :class="{ 'current-page': page === pageNumber }"
         @click="changePage(pageNumber)"
       >
-        {{pageNumber}}
+        {{ pageNumber }}
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -34,7 +36,10 @@ import PostForm from "@/components/PostForm";
 import PostList from "@/components/PostList";
 import MyDialog from "@/components/UI/MyDialog";
 import MySelect from "@/components/UI/MySelect";
+import MyInput from "@/components/UI/MyInput.vue";
+import MyButton from "@/components/UI/MyButton.vue";
 import axios from "axios";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
   components: {
@@ -42,26 +47,26 @@ export default {
     PostList,
     MyDialog,
     MySelect,
+    MyInput,
+    MyButton,
   },
 
   data() {
     return {
-      posts: [],
       dialogVisible: false,
-      isPostLoading: false,
-      selectedSort: "",
-      searchQuery: "",
-      page: 1,
-      limit: 10,
-      totalPages: 0,
-      sortOptions: [
-        { value: "title", name: "By name" },
-        { value: "body", name: "By description" },
-      ],
     };
   },
 
   methods: {
+    ...mapMutations({
+      setPage: "post/setPage",
+      setSearchQuery: 'post/setSearchQuery',
+      setSelectedSort: 'post/setSelectedSort'
+    }),
+    ...mapActions({
+      loadMorePosts: "post/loadMorePosts",
+      fetchPosts: "post/fetchPosts",
+    }),
     createPost(post) {
       this.posts.push(post);
       this.dialogVisible = false;
@@ -72,27 +77,25 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
-    // changePage(pageNumber) {
-    //   this.page = pageNumber;
-    // },
-    
   },
   mounted() {
-    // this.fetchPosts();
-    // const options = {
-    //   rootMargin: '0px',
-    //   threshold: 1.0
-    // };
-    // const callback = (entries, observer) => {
-    //   if (entries[0].isIntersecting && this.page < this.totalPages) {
-    //     this.loadMorePosts();
-    //   }
-    // };
-    // const observer = new IntersectionObserver(callback, options);
-    // observer.observe(this.$refs.observer);
+    this.fetchPosts();
   },
   computed: {
-    
+    ...mapState({
+      posts: state => state.post.posts,
+      isPostLoading: state => state.post.isPostLoading,
+      selectedSort: state => state.post.selectedSort,
+      searchQuery: state => state.post.searchQuery,
+      page: state => state.post.page,
+      limit: state => state.post.limit,
+      totalPages: state => state.post.totalPages,
+      sortOptions: state => state.post.sortOptions
+    }),
+    ...mapGetters({
+      sortedPosts: "post/sortedPosts",
+      sortedAndSearchedPosts: "post/sortedAndSearchedPosts",
+    }),
   },
   watch: {
     // page() {
